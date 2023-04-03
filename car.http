@@ -1,0 +1,19 @@
+### Find All Cars
+GET http://localhost:8085/cars
+
+### Get The Car By Id
+GET http://localhost:8085/cars/1
+
+### Add New Car
+POST http://localhost:8085/save
+Content-Type: application/json
+
+{
+  "id" : 2,
+  "name" : "name",
+  "model" : "",
+  "color" : "black",
+  "year" : 2005,
+  "customerName" : "Sara",
+  "rentEndDate" : "5/4/2023"
+}

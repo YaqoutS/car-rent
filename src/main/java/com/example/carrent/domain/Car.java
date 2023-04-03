@@ -24,5 +24,5 @@ public class Car {
     private String color;
     private int year;
     private String customerName;
-    private LocalDate RentEndDate;
+    private String RentEndDate;
 }
