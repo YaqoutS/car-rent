@@ -28,17 +28,17 @@ public class CarDTO {
     private String customerName;
     private LocalDate rentEndDate;
 
-    public CarDTO(Car car) throws ResponseStatusException {
+    public CarDTO(Car car) {
         id = car.getId();
         name = car.getName();
         model = car.getModel();
         color = car.getColor();
         year = car.getYear();
         customerName = car.getCustomerName();
-        if(car.getRentEndDate().isAfter(LocalDate.now())){
-            rentEndDate = car.getRentEndDate();
+        if(car.getRentEndDate().isBefore(LocalDate.now())){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Rent end date can't be an earlier date!");
         }
-        else throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Rent end date can't be an earlier date!");
+        else rentEndDate = car.getRentEndDate();
     }
 
 //    public static CarDTO toDto(Car car) {

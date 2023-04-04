@@ -3,6 +3,7 @@ package com.example.carrent.service;
 import com.example.carrent.model.Car;
 import com.example.carrent.model.CarDTO;
 import com.example.carrent.repository.CarRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,6 +31,7 @@ public class CarService {
 
     }
 
+    @Transactional //To roll back adding the car if an exception thrown
     public CarDTO save(Car car) {
         return new CarDTO(carRepository.save(car));
     }
