@@ -14,5 +14,5 @@ Content-Type: application/json
   "color" : "black",
   "year" : 2005,
   "customerName" : "Sara",
-  "rentEndDate" : "5/4/2023"
+  "rentEndDate" : "2023-04-10"
 }

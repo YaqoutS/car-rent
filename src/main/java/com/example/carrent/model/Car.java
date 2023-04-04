@@ -26,7 +26,8 @@ public class Car {
     private String color;
     private int year;
     private String customerName;
-    private String rentEndDate;
+    @NonNull
+    private LocalDate rentEndDate;
 
     public Car(CarDTO carDTO) {
         id = carDTO.getId();

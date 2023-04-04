@@ -3,8 +3,13 @@ package com.example.carrent.model;
 import jakarta.persistence.Id;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
+import java.util.Date;
+
+import static java.time.LocalTime.now;
 
 @Builder
 @Getter @Setter
@@ -19,17 +24,21 @@ public class CarDTO {
     private String model;
     private String color;
     private int year;
+    @NonNull
     private String customerName;
-    private String rentEndDate;
+    private LocalDate rentEndDate;
 
-    public CarDTO(Car car) {
+    public CarDTO(Car car) throws ResponseStatusException {
         id = car.getId();
         name = car.getName();
         model = car.getModel();
         color = car.getColor();
         year = car.getYear();
         customerName = car.getCustomerName();
-        rentEndDate = car.getRentEndDate();
+        if(car.getRentEndDate().isAfter(LocalDate.now())){
+            rentEndDate = car.getRentEndDate();
+        }
+        else throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Rent end date can't be an earlier date!");
     }
 
 //    public static CarDTO toDto(Car car) {
