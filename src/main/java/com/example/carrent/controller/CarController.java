@@ -1,6 +1,7 @@
 package com.example.carrent.controller;
 
-import com.example.carrent.domain.Car;
+import com.example.carrent.model.Car;
+import com.example.carrent.model.CarDTO;
 import com.example.carrent.service.CarService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -9,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 public class CarController {
@@ -25,29 +25,22 @@ public class CarController {
         return "Hello, World";
     }
     @GetMapping("/cars")
-    public List<Car> showAll() {
+    public List<CarDTO> showAll() {
         return carService.findAll();
     }
 
     @GetMapping("/cars/{id}")
-    public Car showCar(@PathVariable Long id){
-//        Optional<Car> car = carService.findById(id);
-//        if(car.isPresent()) return car.toString();
-//        else return "There is no car with id = " + id;
-
-        //or we can say
+    public CarDTO showCar(@PathVariable Long id){
         return carService.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Car not found!"));
-
     }
 
     @PostMapping("/save")
-    public String addCar(@Valid @RequestBody Car car, BindingResult bindingResult) {
+    public CarDTO addCar(@Valid @RequestBody CarDTO carDTO, BindingResult bindingResult) {
         if(bindingResult.hasErrors())
-            return "Validation error were found while adding new car.";
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Validation error were found while adding new car");
         else {
-            carService.save(car);
-            return "New car was added successfully";
+            return carService.save(new Car(carDTO));
         }
 
     }

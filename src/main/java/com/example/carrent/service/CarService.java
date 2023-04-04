@@ -1,11 +1,13 @@
 package com.example.carrent.service;
 
-import com.example.carrent.domain.Car;
+import com.example.carrent.model.Car;
+import com.example.carrent.model.CarDTO;
 import com.example.carrent.repository.CarRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CarService {
@@ -15,16 +17,21 @@ public class CarService {
         this.carRepository = carRepository;
     }
 
-    public List<Car> findAll() {
-        return carRepository.findAll();
+    public List<CarDTO> findAll() {
+        return carRepository.findAll()
+                .stream()
+                .map(car -> new CarDTO(car))
+                .collect(Collectors.toList());
     }
 
-    public Optional<Car> findById(Long id) {
-        return carRepository.findById(id);
+    public Optional<CarDTO> findById(Long id) {
+        Optional<Car> car = carRepository.findById(id);
+        return Optional.ofNullable(new CarDTO(car.get()));
+
     }
 
-    public Car save(Car car) {
-        return carRepository.save(car);
+    public CarDTO save(Car car) {
+        return new CarDTO(carRepository.save(car));
     }
 
 }

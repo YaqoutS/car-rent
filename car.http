@@ -1,15 +1,14 @@
 ### Find All Cars
 GET http://localhost:8085/cars
 
-### Get The Car By Id
-GET http://localhost:8085/cars/1
+### Get Car By Id
+GET http://localhost:8085/cars/4
 
 ### Add New Car
 POST http://localhost:8085/save
 Content-Type: application/json
 
 {
-  "id" : 2,
   "name" : "name",
   "model" : "",
   "color" : "black",
