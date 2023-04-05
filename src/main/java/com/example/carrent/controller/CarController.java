@@ -1,15 +1,16 @@
 package com.example.carrent.controller;
 
+import com.example.carrent.exception.EntityNotFoundException;
+import com.example.carrent.exception.RequiredFieldException;
 import com.example.carrent.model.Car;
 import com.example.carrent.model.CarDTO;
 import com.example.carrent.service.CarService;
 import jakarta.validation.Valid;
-import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class CarController {
@@ -31,18 +32,22 @@ public class CarController {
 
     @GetMapping("/cars/{id}")
     public CarDTO showCar(@PathVariable Long id){
-        return carService.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Car not found!"));
+        Optional<Car> optionalCar = carService.findById(id);
+        if(optionalCar.isPresent()){
+            Car car = optionalCar.get();
+            return new CarDTO(car);
+        }
+        else throw new EntityNotFoundException("There is no car with id = " + id);
     }
 
     @PostMapping("/save")
     public CarDTO addCar(@Valid @RequestBody CarDTO carDTO, BindingResult bindingResult) {
-        if(bindingResult.hasErrors())
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Validation error were found while adding new car");
+        if(bindingResult.hasErrors()) {
+            String field = bindingResult.getFieldError().getField();
+            throw new RequiredFieldException("Validation error ! " + field + " is required.");
+        }
         else {
             return carService.save(new Car(carDTO));
         }
-
     }
-
 }

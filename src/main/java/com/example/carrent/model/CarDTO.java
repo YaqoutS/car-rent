@@ -1,15 +1,12 @@
 package com.example.carrent.model;
 
+import com.example.carrent.exception.InValidDateException;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
-
 import java.time.LocalDate;
-import java.util.Date;
-
-import static java.time.LocalTime.now;
 
 @Builder
 @Getter @Setter
@@ -19,13 +16,14 @@ public class CarDTO {
 
     @Id
     private Long id;
-    @NonNull
+    @NonNull @NotEmpty
     private String name;
     private String model;
     private String color;
     private int year;
-    @NonNull
+    @NonNull @NotEmpty
     private String customerName;
+    @NonNull
     private LocalDate rentEndDate;
 
     public CarDTO(Car car) {
@@ -36,7 +34,7 @@ public class CarDTO {
         year = car.getYear();
         customerName = car.getCustomerName();
         if(car.getRentEndDate().isBefore(LocalDate.now())){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Rent end date can't be an earlier date!");
+            throw new InValidDateException("Rent end date can't be an earlier date!");
         }
         else rentEndDate = car.getRentEndDate();
     }
