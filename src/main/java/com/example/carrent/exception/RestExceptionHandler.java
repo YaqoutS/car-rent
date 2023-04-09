@@ -18,16 +18,16 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return buildResponseEntity(apiException);
     }
 
-    @ExceptionHandler(value = InValidDateException.class)
-    public ResponseEntity<Object> handleInValidDateException(InValidDateException exception) {
+    @ExceptionHandler(value = {InValidDateException.class, RequiredFieldException.class})
+    public ResponseEntity<Object> handleInValidDateException(RuntimeException exception) {
         ApiException apiException = new ApiException(HttpStatus.BAD_REQUEST);
         apiException.setMessage(exception.getMessage());
         return buildResponseEntity(apiException);
     }
 
-    @ExceptionHandler(value = RequiredFieldException.class)
-    public ResponseEntity<Object> handleRequiredFieldException(RequiredFieldException exception) {
-        ApiException apiException = new ApiException(HttpStatus.BAD_REQUEST);
+    @ExceptionHandler(value = CarAlreadyRentedException.class)
+    public ResponseEntity<Object> handleCarAlreadyRentedException(CarAlreadyRentedException exception) {
+        ApiException apiException = new ApiException(HttpStatus.CONFLICT);
         apiException.setMessage(exception.getMessage());
         return buildResponseEntity(apiException);
     }

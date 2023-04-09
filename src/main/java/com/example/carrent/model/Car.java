@@ -25,7 +25,6 @@ public class Car {
     private String color;
     private int year;
     private String customerName;
-    @NonNull
     private LocalDate rentEndDate;
 
     public Car(CarDTO carDTO) {
@@ -37,15 +36,4 @@ public class Car {
         customerName = carDTO.getCustomerName();
         rentEndDate = carDTO.getRentEndDate();
     }
-
-//    public static Car toEntity(CarDTO carDTO) {
-//        return builder()
-//                .id(carDTO.getId())
-//                .name(carDTO.getName())
-//                .color(carDTO.getColor())
-//                .year(carDTO.getYear())
-//                .customerName(carDTO.getCustomerName())
-//                .rentEndDate(carDTO.getRentEndDate())
-//                .build();
-//    }
 }

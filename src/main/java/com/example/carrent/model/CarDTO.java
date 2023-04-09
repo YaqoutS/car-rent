@@ -21,9 +21,7 @@ public class CarDTO {
     private String model;
     private String color;
     private int year;
-    @NonNull @NotEmpty
     private String customerName;
-    @NonNull
     private LocalDate rentEndDate;
 
     public CarDTO(Car car) {
@@ -33,20 +31,6 @@ public class CarDTO {
         color = car.getColor();
         year = car.getYear();
         customerName = car.getCustomerName();
-        if(car.getRentEndDate().isBefore(LocalDate.now())){
-            throw new InValidDateException("Rent end date can't be an earlier date!");
-        }
-        else rentEndDate = car.getRentEndDate();
+        rentEndDate = car.getRentEndDate();
     }
-
-//    public static CarDTO toDto(Car car) {
-//        return CarDTO.builder()
-//                .id(car.getId())
-//                .name(car.getName())
-//                .model(car.getModel())
-//                .year(car.getYear())
-//                .customerName(car.getCustomerName())
-//                .rentEndDate(car.getRentEndDate())
-//                .build();
-//    }
 }

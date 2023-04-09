@@ -16,3 +16,6 @@ Content-Type: application/json
   "customerName" : "Sara",
   "rentEndDate" : "2023-04-12"
 }
+
+### Rent a Car
+PATCH http://localhost:8085/cars/4/rent?customerName=yaqout&rentEndDate=2023-05-11

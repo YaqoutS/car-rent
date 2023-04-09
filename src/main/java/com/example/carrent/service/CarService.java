@@ -1,12 +1,14 @@
 package com.example.carrent.service;
 
+import com.example.carrent.exception.CarAlreadyRentedException;
+import com.example.carrent.exception.EntityNotFoundException;
 import com.example.carrent.model.Car;
 import com.example.carrent.model.CarDTO;
 import com.example.carrent.repository.CarRepository;
 import jakarta.transaction.Transactional;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
+
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -35,4 +37,18 @@ public class CarService {
         return new CarDTO(carRepository.save(car));
     }
 
+    public CarDTO rent(Long id, String customerName, LocalDate rentEndDate) {
+        Optional<Car> car = carRepository.findById(id);
+        if(car.isEmpty()) {
+            throw new EntityNotFoundException("There is no car with id = " + id);
+        }
+        Car newCar = car.get();
+        if(!(newCar.getCustomerName() == null || car.get().getCustomerName().equals(""))) {
+            throw new CarAlreadyRentedException("The car is rented by another customer !");
+        }
+        newCar.setCustomerName(customerName);
+        newCar.setRentEndDate(rentEndDate);
+        carRepository.updateNameAndDate(id, customerName, rentEndDate);
+        return new CarDTO(newCar);
+    }
 }
