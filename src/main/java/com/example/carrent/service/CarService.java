@@ -37,6 +37,7 @@ public class CarService {
         return new CarDTO(carRepository.save(car));
     }
 
+    @Transactional
     public CarDTO rent(Long id, String customerName, LocalDate rentEndDate) {
         Optional<Car> car = carRepository.findById(id);
         if(car.isEmpty()) {
@@ -48,7 +49,7 @@ public class CarService {
         }
         newCar.setCustomerName(customerName);
         newCar.setRentEndDate(rentEndDate);
-        carRepository.updateNameAndDate(id, customerName, rentEndDate);
+        carRepository.save(newCar); //jpa will manage the versioning
         return new CarDTO(newCar);
     }
 }

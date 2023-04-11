@@ -3,6 +3,7 @@ package com.example.carrent.model;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.Version;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 import java.time.LocalDate;
@@ -23,6 +24,8 @@ public class Car {
     private int year;
     private String customerName;
     private LocalDate rentEndDate;
+    @Version
+    private int version;
 
     public Car(CarDTO carDTO) {
         id = carDTO.getId();
