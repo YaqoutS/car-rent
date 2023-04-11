@@ -13,9 +13,20 @@ Content-Type: application/json
   "model" : "",
   "color" : "black",
   "year" : 2005,
-  "customerName" : "Sara",
-  "rentEndDate" : "2023-04-12"
+  "customerName" : "",
+  "rentEndDate" : ""
 }
 
 ### Rent a Car
-PATCH http://localhost:8085/cars/4/rent?customerName=yaqout&rentEndDate=2023-05-11
+PATCH http://localhost:8085/cars/rent
+Content-Type: application/json
+
+{
+  "id" : 2,
+  "name" : "",
+  "model" : "",
+  "color" : "black",
+  "year" : 2005,
+  "customerName" : "yaqout",
+  "rentEndDate" : "2023-04-12"
+}

@@ -1,11 +1,11 @@
 package com.example.carrent.model;
 
-import com.example.carrent.exception.InValidDateException;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.server.ResponseStatusException;
+
 import java.time.LocalDate;
 
 @Builder
@@ -16,12 +16,13 @@ public class CarDTO {
 
     @Id
     private Long id;
-    @NonNull @NotEmpty
     private String name;
     private String model;
     private String color;
     private int year;
+    @NotEmpty
     private String customerName;
+    @NotNull @Future
     private LocalDate rentEndDate;
 
     public CarDTO(Car car) {

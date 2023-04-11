@@ -32,7 +32,7 @@ public class CarService {
         return carRepository.findById(id);
     }
 
-    @Transactional //To roll back adding the car if an exception thrown
+    @Transactional
     public CarDTO save(Car car) {
         return new CarDTO(carRepository.save(car));
     }
@@ -44,7 +44,7 @@ public class CarService {
         }
         Car newCar = car.get();
         if(!(newCar.getCustomerName() == null || car.get().getCustomerName().equals(""))) {
-            throw new CarAlreadyRentedException("The car is rented by another customer !");
+            throw new CarAlreadyRentedException("The car is rented by another customer.");
         }
         newCar.setCustomerName(customerName);
         newCar.setRentEndDate(rentEndDate);
