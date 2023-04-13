@@ -49,7 +49,7 @@ public class CarService {
         }
         newCar.setCustomerName(customerName);
         newCar.setRentEndDate(rentEndDate);
-        carRepository.save(newCar); //jpa will manage the versioning
+        carRepository.updateCar(id, customerName, rentEndDate);
         return new CarDTO(newCar);
     }
 }
