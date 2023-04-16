@@ -24,8 +24,6 @@ public class Car {
     private int year;
     private String customerName;
     private LocalDate rentEndDate;
-    @Version
-    private int version;
 
     public Car(CarDTO carDTO) {
         id = carDTO.getId();

@@ -5,8 +5,9 @@ import com.example.carrent.exception.EntityNotFoundException;
 import com.example.carrent.model.Car;
 import com.example.carrent.model.CarDTO;
 import com.example.carrent.repository.CarRepository;
-import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -37,7 +38,7 @@ public class CarService {
         return new CarDTO(carRepository.save(car));
     }
 
-    @Transactional
+    @Transactional(isolation = Isolation.SERIALIZABLE) // or REPEATABLE_READ
     public CarDTO rent(Long id, String customerName, LocalDate rentEndDate) {
         Optional<Car> car = carRepository.findById(id);
         if(car.isEmpty()) {
