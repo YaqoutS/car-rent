@@ -8,7 +8,6 @@ import com.example.carrent.model.CarDTO;
 import com.example.carrent.repository.CarRepository;
 import org.springframework.retry.annotation.Recover;
 import org.springframework.retry.annotation.Retryable;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
@@ -64,33 +63,4 @@ public class CarService {
         // handle the exception after all retries have failed
         throw new InternalServerException("Sorry, an internal error happened.");
     }
-
-    @Retryable(value = {CannotAcquireLockException.class})
-    @Async @Transactional(isolation = Isolation.SERIALIZABLE)
-    public void writeWithWait(Long id, int sleepTime, int callNumber) throws InterruptedException {
-        System.out.println(callNumber + " Enter the method.. ");
-        Optional<Car> optionalCar = carRepository.findById(id);
-        System.out.println(callNumber + " read.. " + optionalCar.get().getCustomerName());
-        if(optionalCar.isPresent() && optionalCar.get().getCustomerName().isEmpty()) {
-            Car car = optionalCar.get();
-            System.out.println(callNumber + " read again before wait.. " + carRepository.findById(id).get().getCustomerName());
-            System.out.println(callNumber + " method will start wait");
-            Thread.sleep(sleepTime);
-            System.out.println(callNumber + " method finished waiting");
-            System.out.println(callNumber + " read again after wait.. " + carRepository.findById(id).get().getCustomerName());
-            if(callNumber == 1) car.setCustomerName("Yaqout");
-            else car.setCustomerName("Sara");
-            carRepository.save(car);
-            System.out.println(callNumber + " write to the database");
-        }
-        else System.out.println(callNumber + " car is already rented");
-    }
-
-    @Recover
-    public void recoverTest(CannotAcquireLockException e) {
-        // handle the exception after all retries have failed
-        System.out.println("Sorry, you can't rent the car");
-    }
-
-
 }

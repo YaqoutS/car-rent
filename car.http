@@ -28,11 +28,5 @@ Content-Type: application/json
   "color" : "black",
   "year" : 2005,
   "customerName" : "yaqout",
-  "rentEndDate" : "2023-04-20"
+  "rentEndDate" : "2023-04-29"
 }
-
-### Test
-GET http://localhost:8085/test/1
-
-### Delete
-DELETE http://localhost:8085/delete/1
