@@ -30,17 +30,21 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<Object>(errors, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(value = InternalServerException.class)
+    public ResponseEntity<Object> handleInternalServerException(InternalServerException exception) {
+        ApiException apiException = new ApiException(HttpStatus.INTERNAL_SERVER_ERROR, exception.getMessage());
+        return buildResponseEntity(apiException);
+    }
+
     @ExceptionHandler(value = EntityNotFoundException.class)
     public ResponseEntity<Object> handleApiRequestException(EntityNotFoundException exception) {
-        ApiException apiException = new ApiException(HttpStatus.NOT_FOUND);
-        apiException.setMessage(exception.getMessage());
+        ApiException apiException = new ApiException(HttpStatus.NOT_FOUND, exception.getMessage());
         return buildResponseEntity(apiException);
     }
 
     @ExceptionHandler(value = CarAlreadyRentedException.class)
     public ResponseEntity<Object> handleCarAlreadyRentedException(CarAlreadyRentedException exception) {
-        ApiException apiException = new ApiException(HttpStatus.CONFLICT);
-        apiException.setMessage(exception.getMessage());
+        ApiException apiException = new ApiException(HttpStatus.CONFLICT, exception.getMessage());
         return buildResponseEntity(apiException);
     }
 

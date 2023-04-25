@@ -5,7 +5,6 @@ import com.example.carrent.model.Car;
 import com.example.carrent.model.CarDTO;
 import com.example.carrent.service.CarService;
 import jakarta.validation.Valid;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -44,4 +43,18 @@ public class CarController {
     public CarDTO rent(@Valid @RequestBody CarDTO carDTO) {
         return carService.rent(carDTO.getId(), carDTO.getCustomerName(), carDTO.getRentEndDate());
     }
+
+    @GetMapping("/test/{id}")
+    public CarDTO update(@PathVariable Long id) throws InterruptedException {
+        //carService.writeWithoutWait(id);
+        carService.writeWithWait(id, 10000, 1);
+        carService.writeWithWait(id, 0, 2);
+        Optional<Car> optionalCar = carService.findById(id);
+        if(optionalCar.isPresent()){
+            Car car = optionalCar.get();
+            return new CarDTO(car);
+        }
+        else throw new EntityNotFoundException("There is no car with id = " + id);
+    }
+
 }

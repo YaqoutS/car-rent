@@ -26,6 +26,13 @@ public class ApiException {
         debugMessage = "";
     }
 
+    ApiException(HttpStatus status, String message) {
+        this();
+        this.status = status;
+        this.message = message;
+        this.debugMessage = "";
+    }
+
     ApiException(HttpStatus status, Throwable ex) {
         this();
         this.status = status;

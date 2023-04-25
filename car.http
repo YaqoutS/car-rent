@@ -2,7 +2,7 @@
 GET http://localhost:8085/cars
 
 ### Find Car By Id
-GET http://localhost:8085/cars/2
+GET http://localhost:8085/cars/1
 
 ### Add New Car
 POST http://localhost:8085/save
@@ -28,5 +28,11 @@ Content-Type: application/json
   "color" : "black",
   "year" : 2005,
   "customerName" : "yaqout",
-  "rentEndDate" : "2023-04-17"
+  "rentEndDate" : "2023-04-20"
 }
+
+### Test
+GET http://localhost:8085/test/1
+
+### Delete
+DELETE http://localhost:8085/delete/1
