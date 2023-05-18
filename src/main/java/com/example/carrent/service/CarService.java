@@ -37,9 +37,21 @@ public class CarService {
         return carRepository.findById(id);
     }
 
+//    public Car findByyId(Long id) {
+//        return carRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("There is no car with id = " + id));
+//    }
+
     @Transactional
     public CarDTO save(Car car) {
         return new CarDTO(carRepository.save(car));
+    }
+
+    public void delete(Car car) {
+        carRepository.delete(car);
+    }
+
+    public void deleteAll() {
+        carRepository.deleteAll();
     }
 
     @Retryable(value = {CannotAcquireLockException.class})
@@ -55,8 +67,12 @@ public class CarService {
         }
         newCar.setCustomerName(customerName);
         newCar.setRentEndDate(rentEndDate);
-        carRepository.updateCar(id, customerName, rentEndDate); //even if this deleted, the database is updated!!!!!
+        carRepository.rentCar(id, customerName, rentEndDate); //even if this deleted, the database is updated!!!!!
         return new CarDTO(newCar);
+    }
+    @Recover
+    public CarDTO recover(CarAlreadyRentedException exception) {
+        throw new CarAlreadyRentedException("The car is rented by another customer.");
     }
     @Recover
     public CarDTO recover(CannotAcquireLockException e) {

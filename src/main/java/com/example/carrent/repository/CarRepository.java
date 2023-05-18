@@ -12,5 +12,5 @@ import java.time.LocalDate;
 public interface CarRepository extends JpaRepository<Car, Long> {
     @Modifying
     @Query(value = "UPDATE Car car SET car.customerName = :customerName, car.rentEndDate = :rentEndDate WHERE car.id = :id")
-    void updateCar(Long id, String customerName, LocalDate rentEndDate);
+    void rentCar(Long id, String customerName, LocalDate rentEndDate);
 }
