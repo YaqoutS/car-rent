@@ -34,4 +34,14 @@ public class Car {
         customerName = carDTO.getCustomerName();
         rentEndDate = carDTO.getRentEndDate();
     }
+
+    public Car(Car car) {
+        id = car.getId();
+        name = car.getName();
+        model = car.getModel();
+        color = car.getColor();
+        year = car.getYear();
+        customerName = car.getCustomerName();
+        rentEndDate = car.getRentEndDate();
+    }
 }

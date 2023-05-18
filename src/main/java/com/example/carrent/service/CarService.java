@@ -56,18 +56,18 @@ public class CarService {
 
     @Retryable(value = {CannotAcquireLockException.class})
     @Transactional(isolation = Isolation.SERIALIZABLE)
-    public CarDTO rent(Long id, String customerName, LocalDate rentEndDate) {
-        Optional<Car> car = carRepository.findById(id);
+    public CarDTO rent(CarDTO carDTO) {
+        Optional<Car> car = carRepository.findById(carDTO.getId());
         if(!car.isPresent()) {
-            throw new EntityNotFoundException("There is no car with id = " + id);
+            throw new EntityNotFoundException("There is no car with id = " + carDTO.getId());
         }
         Car newCar = car.get();
         if(!(newCar.getCustomerName() == null || car.get().getCustomerName().equals(""))) {
             throw new CarAlreadyRentedException("The car is rented by another customer.");
         }
-        newCar.setCustomerName(customerName);
-        newCar.setRentEndDate(rentEndDate);
-        carRepository.rentCar(id, customerName, rentEndDate); //even if this deleted, the database is updated!!!!!
+        newCar.setCustomerName(carDTO.getCustomerName());
+        newCar.setRentEndDate(carDTO.getRentEndDate());
+        carRepository.save(newCar); //even if this deleted, the database is updated!!!!!
         return new CarDTO(newCar);
     }
     @Recover

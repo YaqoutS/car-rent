@@ -10,7 +10,7 @@ import java.time.LocalDate;
 
 @Repository
 public interface CarRepository extends JpaRepository<Car, Long> {
-    @Modifying
-    @Query(value = "UPDATE Car car SET car.customerName = :customerName, car.rentEndDate = :rentEndDate WHERE car.id = :id")
-    void rentCar(Long id, String customerName, LocalDate rentEndDate);
+//    @Modifying
+//    @Query(value = "UPDATE Car car SET car.customerName = :customerName, car.rentEndDate = :rentEndDate WHERE car.id = :id")
+//    void rentCar(Long id, String customerName, LocalDate rentEndDate);
 }

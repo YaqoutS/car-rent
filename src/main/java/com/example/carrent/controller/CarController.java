@@ -41,7 +41,7 @@ public class CarController {
 
     @PatchMapping("/cars/rent")
     public CarDTO rent(@Valid @RequestBody CarDTO carDTO) {
-        return carService.rent(carDTO.getId(), carDTO.getCustomerName(), carDTO.getRentEndDate());
+        return carService.rent(carDTO);
     }
 
 }
