@@ -1,10 +1,10 @@
 package com.example.carrent.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Version;
-import jakarta.validation.constraints.NotEmpty;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Version;
+import javax.validation.constraints.NotEmpty;
 import lombok.*;
 import java.time.LocalDate;
 

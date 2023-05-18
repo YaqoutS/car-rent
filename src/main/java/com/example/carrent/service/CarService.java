@@ -46,7 +46,7 @@ public class CarService {
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public CarDTO rent(Long id, String customerName, LocalDate rentEndDate) {
         Optional<Car> car = carRepository.findById(id);
-        if(car.isEmpty()) {
+        if(!car.isPresent()) {
             throw new EntityNotFoundException("There is no car with id = " + id);
         }
         Car newCar = car.get();

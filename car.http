@@ -22,11 +22,11 @@ PATCH http://localhost:8085/cars/rent
 Content-Type: application/json
 
 {
-  "id" : 1,
+  "id" : 3,
   "name" : "",
   "model" : "",
   "color" : "black",
   "year" : 2005,
   "customerName" : "yaqout",
-  "rentEndDate" : "2023-04-29"
+  "rentEndDate" : "2023-07-29"
 }

@@ -4,7 +4,7 @@ import com.example.carrent.exception.EntityNotFoundException;
 import com.example.carrent.model.Car;
 import com.example.carrent.model.CarDTO;
 import com.example.carrent.service.CarService;
-import jakarta.validation.Valid;
+import javax.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
