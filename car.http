@@ -22,11 +22,25 @@ PATCH http://localhost:8085/cars/rent
 Content-Type: application/json
 
 {
-  "id" : 3,
+  "id" : 8,
   "name" : "",
   "model" : "",
   "color" : "black",
   "year" : 2005,
   "customerName" : "yaqout",
   "rentEndDate" : "2023-07-29"
+}
+
+### Delete a Car
+DELETE http://localhost:8085/cars/delete
+Content-Type: application/json
+
+{
+  "id": 9,
+  "name" : "name",
+  "model" : "",
+  "color" : "black",
+  "year" : 2005,
+  "customerName" : "",
+  "rentEndDate" : ""
 }

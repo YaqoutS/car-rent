@@ -24,7 +24,6 @@ import java.util.Optional;
 
 @ExtendWith(MockitoExtension.class)
 public class CarServiceTest {
-
     @Mock
     private CarRepository carRepository;
     @InjectMocks
@@ -51,7 +50,6 @@ public class CarServiceTest {
 
         carDTO1 = new CarDTO(car1);
         carDTO2 = new CarDTO(car2);
-
     }
 
     @Test
@@ -90,49 +88,39 @@ public class CarServiceTest {
 
     @Test
     void rentCar() {
-        //carDTO1.setCustomerName("");
-        car1 = new Car(carDTO1);
-
         when(carRepository.findById(anyLong())).thenReturn(Optional.of(car1));
         Car newCar = new Car(car1);
         newCar.setCustomerName("doaa");
         newCar.setRentEndDate(LocalDate.of(2023, Month.JULY, 22));
-        when(carRepository.save(any(Car.class))).thenReturn(newCar);
-
-        CarDTO newCarDTO = carService.rent(carDTO1);
-
+        CarDTO newCarDTO = carService.rent(new CarDTO(newCar));
         assertEquals("doaa", newCarDTO.getCustomerName());
         assertEquals(LocalDate.of(2023, Month.JULY, 22), newCarDTO.getRentEndDate());
     }
 
-    @Test @Disabled
+    @Test
     void rentedCarException() {
 
-//        carService.save(car1);
-//        Car existingCar = carService.findById(car1.getId()).get();
-//        existingCar.setCustomerName("doaa");
-//        existingCar.setRentEndDate(LocalDate.of(2023, Month.JULY, 22));
-//
-//
-//        Exception exception = assertThrows(CarAlreadyRentedException.class, () -> {
-//            //carService.rent();
-//        });
-//
-//        String expectedMessage = "The car is rented by another customer.";
-//        String actualMessage = exception.getMessage();
-//
-//        assertEquals(expectedMessage, actualMessage);
+        car1.setCustomerName("doaa");
+        car1.setRentEndDate(LocalDate.of(2023, Month.JULY, 22));
+        when(carRepository.findById(anyLong())).thenReturn(Optional.of(car1));
+
+        Exception exception = assertThrows(CarAlreadyRentedException.class, () -> {
+            carService.rent(new CarDTO(car1));
+        });
+
+        String expectedMessage = "The car is rented by another customer.";
+        String actualMessage = exception.getMessage();
+
+        assertEquals(expectedMessage, actualMessage);
     }
 
     @Test
     void deleteCar() {
-        when(carRepository.findById(anyLong())).thenReturn(Optional.of(car1));
-        doNothing().when(carService).delete(any(Car.class));
+        doNothing().when(carRepository).delete(any(Car.class));
 
         carService.delete(car1);
 
         verify(carRepository, times(1)).delete(car1);
-
     }
 
     @AfterEach

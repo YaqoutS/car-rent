@@ -5,6 +5,8 @@ import com.example.carrent.model.Car;
 import com.example.carrent.model.CarDTO;
 import com.example.carrent.service.CarService;
 import javax.validation.Valid;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -42,6 +44,14 @@ public class CarController {
     @PatchMapping("/cars/rent")
     public CarDTO rent(@Valid @RequestBody CarDTO carDTO) {
         return carService.rent(carDTO);
+    }
+
+    @DeleteMapping("/cars/delete")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(CarDTO carDTO) {
+        Car car = new Car(carDTO);
+        System.out.println(car);
+        carService.delete(car);
     }
 
 }
