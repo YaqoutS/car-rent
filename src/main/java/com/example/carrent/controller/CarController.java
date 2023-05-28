@@ -10,8 +10,6 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import javax.imageio.IIOException;
-import javax.imageio.ImageWriteParam;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
@@ -56,13 +54,15 @@ public class CarController {
     }
 
     @PatchMapping("/cars/rent")
-    public CarDTO rent(@Valid @RequestBody CarDTO carDTO) {
+    public CarDTO rent(@Valid @RequestBody CarDTO carDTO) throws IOException{
+        String response = elasticSearchQuery.rentCar(new Car(carDTO));
+        System.out.println(response);
         return carService.rent(carDTO);
     }
 
     @DeleteMapping("/cars/delete")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(CarDTO carDTO) throws IOException {
+    public void delete(@RequestBody CarDTO carDTO) throws IOException {
         String response = elasticSearchQuery.deleteDocumentById(carDTO.getId() + "");
         System.out.println(response);
 

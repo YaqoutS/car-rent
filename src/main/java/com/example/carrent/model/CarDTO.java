@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 @Builder
 @Getter @Setter
@@ -24,7 +25,7 @@ public class CarDTO {
     @NotEmpty
     private String customerName;
     @NotNull @Future
-    private LocalDate rentEndDate;
+    private Date rentEndDate;
 
     public CarDTO(Car car) {
         id = car.getId();

@@ -25,7 +25,7 @@ public class ElasticSearchQuery {
     public String createOrUpdateDocument(Car car) throws IOException {
         IndexResponse response = elasticsearchClient.index(i -> i
                 .index(indexName)
-                .id(String.valueOf(car.getId()))
+                .id(car.getId() + "")
                 .document(car)
         );
         if(response.result().name().equals("Created")){
@@ -70,9 +70,30 @@ public class ElasticSearchQuery {
         List<Hit> hits = searchResponse.hits().hits();
         List<Car> cars = new ArrayList<>();
         for(Hit object : hits){
-            System.out.print(((Car) object.source()));
+            //System.out.println(((Car) object.source()));
             cars.add((Car) object.source());
         }
         return cars;
+    }
+
+    public String rentCar(Car car) throws IOException {
+        Car finalCar = car;
+        GetResponse<Car> response = elasticsearchClient.get(g -> g
+                        .index(indexName)
+                        .id(finalCar.getId() + ""),
+                Car.class
+        );
+        if (!response.found()) {
+            return ("There is no car with id = " + finalCar.getId());
+        }
+        Car responseCar = response.source();
+        //System.out.println(responseCar);
+        if(responseCar.getCustomerName() != "" && responseCar.getCustomerName() != null) {
+            return ("The car is rented by another customer");
+        }
+        else {
+            //System.out.println(car);
+            return createOrUpdateDocument(finalCar);
+        }
     }
 }

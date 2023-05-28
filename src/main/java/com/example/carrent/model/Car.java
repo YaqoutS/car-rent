@@ -6,11 +6,13 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Version;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
+import org.springframework.data.annotation.ReadOnlyProperty;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 @Entity
 @Getter
@@ -21,20 +23,21 @@ import java.time.LocalDate;
 @Builder
 @Document(indexName = "cars")
 public class Car {
-    @Id @GeneratedValue
+    //@Field(type = FieldType.Long, name = "id")
+    @Id
     private Long id;
-    @Field(type = FieldType.Text, name = "name")
+    //@Field(type = FieldType.Text, name = "name")
     private String name;
-    @Field(type = FieldType.Text, name = "model")
+    //@Field(type = FieldType.Text, name = "model")
     private String model;
-    @Field(type = FieldType.Text, name = "color")
+    //@Field(type = FieldType.Text, name = "color")
     private String color;
-    @Field(type = FieldType.Integer, name = "year")
+    //@Field(type = FieldType.Integer, name = "year")
     private int year;
-    @Field(type = FieldType.Text, name = "customerName")
+    //@Field(type = FieldType.Text, name = "customerName")
     private String customerName;
-    @Field(type = FieldType.Date, name = "rentEndDate")
-    private LocalDate rentEndDate;
+    //@Field(type = FieldType.Date, name = "rentEndDate")
+    private Date rentEndDate;
 
     public Car(CarDTO carDTO) {
         id = carDTO.getId();
