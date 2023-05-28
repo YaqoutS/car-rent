@@ -1,11 +1,15 @@
 package com.example.carrent.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Version;
-import javax.validation.constraints.NotEmpty;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.Version;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
+import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
+
 import java.time.LocalDate;
 
 @Entity
@@ -15,14 +19,21 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Document(indexName = "cars")
 public class Car {
     @Id @GeneratedValue
     private Long id;
+    @Field(type = FieldType.Text, name = "name")
     private String name;
+    @Field(type = FieldType.Text, name = "model")
     private String model;
+    @Field(type = FieldType.Text, name = "color")
     private String color;
+    @Field(type = FieldType.Integer, name = "year")
     private int year;
+    @Field(type = FieldType.Text, name = "customerName")
     private String customerName;
+    @Field(type = FieldType.Date, name = "rentEndDate")
     private LocalDate rentEndDate;
 
     public Car(CarDTO carDTO) {
