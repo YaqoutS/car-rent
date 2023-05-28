@@ -53,9 +53,7 @@ public class ElasticSearchQuery {
     }
 
     public String deleteDocumentById(String carId) throws IOException {
-
         DeleteRequest request = DeleteRequest.of(d -> d.index(indexName).id(carId));
-
         DeleteResponse deleteResponse = elasticsearchClient.delete(request);
         if (Objects.nonNull(deleteResponse.result()) && !deleteResponse.result().name().equals("NotFound")) {
             return "Car with id " + deleteResponse.id() + " has been deleted.";
@@ -88,7 +86,7 @@ public class ElasticSearchQuery {
         }
         Car responseCar = response.source();
         //System.out.println(responseCar);
-        if(responseCar.getCustomerName() != "" && responseCar.getCustomerName() != null) {
+        if(!Objects.equals(responseCar.getCustomerName(), "") && responseCar.getCustomerName() != null) {
             return ("The car is rented by another customer");
         }
         else {
