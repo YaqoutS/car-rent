@@ -12,10 +12,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.awt.*;
-import java.time.LocalDate;
-import java.time.Month;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -102,7 +100,7 @@ public class CarControllerTest {
     @Test
     void rentCar() throws Exception {
         carDTO1.setCustomerName("yaqout");
-        carDTO1.setRentEndDate(LocalDate.of(2023, Month.JULY, 12));
+        carDTO1.setRentEndDate(new Date(2023, 7, 12));
         System.out.println(carDTO1);
         when(carService.rent(any(CarDTO.class))).thenReturn(carDTO1);
 
@@ -116,9 +114,9 @@ public class CarControllerTest {
 
     @Test
     void deleteCar() throws Exception{
-        doNothing().when(carService).delete(any(Car.class));
+        doNothing().when(carService).deleteById(any(Long.class));
 
-        mockMvc.perform(delete("/cars/delete"))
+        mockMvc.perform(delete("/cars/{id}"))
                 .andExpect(status().isNoContent());
     }
 }

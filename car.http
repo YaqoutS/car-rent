@@ -5,11 +5,10 @@ GET http://localhost:8085/cars
 GET http://localhost:8085/cars/4
 
 ### Add New Car
-POST http://localhost:8085/save
+POST http://localhost:8085/cars/save
 Content-Type: application/json
 
 {
-  "id" : 4,
   "name" : "name",
   "model" : "",
   "color" : "black",
@@ -29,7 +28,7 @@ Content-Type: application/json
   "color" : "black",
   "year" : 2005,
   "customerName" : "yaqout",
-  "rentEndDate" : "2023-05-29"
+  "rentEndDate" : "2023-06-29"
 }
 
 ### Delete a Car

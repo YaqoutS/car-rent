@@ -16,9 +16,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.LocalDate;
-import java.time.Month;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -91,17 +90,17 @@ public class CarServiceTest {
         when(carRepository.findById(anyLong())).thenReturn(Optional.of(car1));
         Car newCar = new Car(car1);
         newCar.setCustomerName("doaa");
-        newCar.setRentEndDate(LocalDate.of(2023, Month.JULY, 22));
+        newCar.setRentEndDate(new Date(2023, 7, 22));
         CarDTO newCarDTO = carService.rent(new CarDTO(newCar));
         assertEquals("doaa", newCarDTO.getCustomerName());
-        assertEquals(LocalDate.of(2023, Month.JULY, 22), newCarDTO.getRentEndDate());
+        assertEquals(new Date(2023, 7, 22), newCarDTO.getRentEndDate());
     }
 
     @Test
     void rentedCarException() {
 
         car1.setCustomerName("doaa");
-        car1.setRentEndDate(LocalDate.of(2023, Month.JULY, 22));
+        car1.setRentEndDate(new Date(2023, 7, 22));
         when(carRepository.findById(anyLong())).thenReturn(Optional.of(car1));
 
         Exception exception = assertThrows(CarAlreadyRentedException.class, () -> {
@@ -116,11 +115,11 @@ public class CarServiceTest {
 
     @Test
     void deleteCar() {
-        doNothing().when(carRepository).delete(any(Car.class));
+        doNothing().when(carRepository).deleteById(any(Long.class));
 
-        carService.delete(car1);
+        carService.deleteById(car1.getId());
 
-        verify(carRepository, times(1)).delete(car1);
+        verify(carRepository, times(1)).deleteById(car1.getId());
     }
 
     @AfterEach

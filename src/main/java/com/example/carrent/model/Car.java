@@ -1,9 +1,6 @@
 package com.example.carrent.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Version;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 import org.springframework.data.annotation.ReadOnlyProperty;
@@ -24,7 +21,7 @@ import java.util.Date;
 @Document(indexName = "cars")
 public class Car {
     //@Field(type = FieldType.Long, name = "id")
-    @Id
+    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
     //@Field(type = FieldType.Text, name = "name")
     private String name;

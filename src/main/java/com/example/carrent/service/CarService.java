@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.dao.CannotAcquireLockException;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -46,8 +45,8 @@ public class CarService {
         return new CarDTO(carRepository.save(car));
     }
 
-    public void delete(Car car) {
-        carRepository.delete(car);
+    public void deleteById(Long id) {
+        carRepository.deleteById(id);
     }
 
     public void deleteAll() {

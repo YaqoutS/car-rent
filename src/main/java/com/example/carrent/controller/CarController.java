@@ -46,11 +46,12 @@ public class CarController {
         else throw new EntityNotFoundException("There is no car with id = " + id);
     }
 
-    @PostMapping("/save")
+    @PostMapping("/cars/save")
     public CarDTO addCar(@RequestBody CarDTO carDTO) throws IOException{
-        String response = elasticSearchQuery.createOrUpdateDocument(new Car(carDTO));
+        CarDTO carDTO1 = carService.save(new Car(carDTO));
+        String response = elasticSearchQuery.createOrUpdateDocument(new Car(carDTO1));
         System.out.println(response);
-        return carService.save(new Car(carDTO));
+        return carDTO1;
     }
 
     @PatchMapping("/cars/rent")
@@ -60,14 +61,11 @@ public class CarController {
         return carService.rent(carDTO);
     }
 
-    @DeleteMapping("/cars/delete")
+    @DeleteMapping("/cars/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@RequestBody CarDTO carDTO) throws IOException {
-        String response = elasticSearchQuery.deleteDocumentById(carDTO.getId() + "");
+    public void delete(@PathVariable Long id) throws IOException {
+        String response = elasticSearchQuery.deleteDocumentById(id + "");
         System.out.println(response);
-
-        Car car = new Car(carDTO);
-        System.out.println(car);
-        carService.delete(car);
+        carService.deleteById(id);
     }
 }

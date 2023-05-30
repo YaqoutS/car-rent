@@ -11,8 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.time.LocalDate;
-import java.time.Month;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,12 +29,12 @@ public class CarRepositoryTest {
         car1 = new Car();
         car1.setColor("red");
         car1.setCustomerName("sara");
-        car1.setRentEndDate(LocalDate.of(2023, Month.JULY, 22));
+        car1.setRentEndDate(new Date(2023, 7, 22));
 
         car2 = new Car();
         car2.setColor("black");
         car2.setCustomerName("yaqout");
-        car1.setRentEndDate(LocalDate.of(2023, Month.NOVEMBER, 18));
+        car1.setRentEndDate(new Date(2023, 7, 18));
     }
 
     @Test
