@@ -4,6 +4,7 @@ import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import co.elastic.clients.elasticsearch.core.*;
 import co.elastic.clients.elasticsearch.core.search.Hit;
 import com.example.carrent.model.Car;
+import com.example.carrent.model.Notification;
 import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
@@ -16,15 +17,15 @@ public class ElasticSearchQuery {
 
     private final ElasticsearchClient elasticsearchClient;
 
-    private final String indexName = "cars";
+//    private final String indexName = "cars";
 
     public ElasticSearchQuery(ElasticsearchClient elasticsearchClient) {
         this.elasticsearchClient = elasticsearchClient;
     }
 
-    public String createOrUpdateDocument(Car car) throws IOException {
+    public String createOrUpdateCarDocument(Car car) throws IOException {
         IndexResponse response = elasticsearchClient.index(i -> i
-                .index(indexName)
+                .index("cars")
                 .id(car.getId() + "")
                 .document(car)
         );
@@ -36,10 +37,10 @@ public class ElasticSearchQuery {
         return "Error while performing the operation.";
     }
 
-    public Car getDocumentById(String carId) throws IOException{
+    public Car getCarDocumentById(String carId) throws IOException{
         Car car = null;
         GetResponse<Car> response = elasticsearchClient.get(g -> g
-                        .index(indexName)
+                        .index("cars")
                         .id(carId),
                 Car.class
         );
@@ -52,8 +53,8 @@ public class ElasticSearchQuery {
         return car;
     }
 
-    public String deleteDocumentById(String carId) throws IOException {
-        DeleteRequest request = DeleteRequest.of(d -> d.index(indexName).id(carId));
+    public String deleteCarDocumentById(String carId) throws IOException {
+        DeleteRequest request = DeleteRequest.of(d -> d.index("cars").id(carId));
         DeleteResponse deleteResponse = elasticsearchClient.delete(request);
         if (Objects.nonNull(deleteResponse.result()) && !deleteResponse.result().name().equals("NotFound")) {
             return "Car with id " + deleteResponse.id() + " has been deleted.";
@@ -62,13 +63,12 @@ public class ElasticSearchQuery {
         return "Car with id " + deleteResponse.id() + " does not exist.";
     }
 
-    public  List<Car> searchAllDocuments() throws IOException {
-        SearchRequest searchRequest =  SearchRequest.of(s -> s.index(indexName));
+    public  List<Car> searchAllCarDocuments() throws IOException {
+        SearchRequest searchRequest =  SearchRequest.of(s -> s.index("cars"));
         SearchResponse searchResponse =  elasticsearchClient.search(searchRequest, Car.class);
         List<Hit> hits = searchResponse.hits().hits();
         List<Car> cars = new ArrayList<>();
         for(Hit object : hits){
-            //System.out.println(((Car) object.source()));
             cars.add((Car) object.source());
         }
         return cars;
@@ -77,7 +77,7 @@ public class ElasticSearchQuery {
     public String rentCar(Car car) throws IOException {
         Car finalCar = car;
         GetResponse<Car> response = elasticsearchClient.get(g -> g
-                        .index(indexName)
+                        .index("cars")
                         .id(finalCar.getId() + ""),
                 Car.class
         );
@@ -90,8 +90,32 @@ public class ElasticSearchQuery {
             return ("The car is rented by another customer");
         }
         else {
-            //System.out.println(car);
-            return createOrUpdateDocument(finalCar);
+            return createOrUpdateCarDocument(finalCar);
         }
+    }
+
+    public  List<Notification> getAllNotifications() throws IOException {
+        SearchRequest searchRequest =  SearchRequest.of(s -> s.index("notifications"));
+        SearchResponse searchResponse =  elasticsearchClient.search(searchRequest, Notification.class);
+        System.out.println("Response: " + searchResponse);
+        List<Hit> hits = searchResponse.hits().hits();
+        List<Notification> notifications = new ArrayList<>();
+        Notification notification;
+        for(Hit<Notification> object : hits){
+            System.out.println("Object: " + object);
+            notification = (Notification) object.source();
+            notification.setId(object.id());
+            notifications.add(notification);
+        }
+        return notifications;
+    }
+
+    public String deleteNotificationById(String id) throws IOException {
+        DeleteRequest deleteRequest = DeleteRequest.of(d -> d.index("notifications").id(id));
+        DeleteResponse deleteResponse = elasticsearchClient.delete(deleteRequest);
+        if (Objects.nonNull(deleteResponse.result()) && !deleteResponse.result().name().equals("NotFound")) {
+            return "Notification deleted";
+        }
+        return "Error: notification can't be found";
     }
 }

@@ -9,6 +9,7 @@ POST http://localhost:8085/cars/save
 Content-Type: application/json
 
 {
+  "id" : 22,
   "name" : "name",
   "model" : "",
   "color" : "black",
@@ -22,25 +23,23 @@ PATCH http://localhost:8085/cars/rent
 Content-Type: application/json
 
 {
-  "id" : 4,
+  "id" : 452,
   "name" : "",
   "model" : "",
   "color" : "black",
   "year" : 2005,
   "customerName" : "yaqout",
-  "rentEndDate" : "2023-06-29"
+  "rentEndDate" : "2023-12-29"
 }
 
 ### Delete a Car
-DELETE http://localhost:8085/cars/delete
-Content-Type: application/json
+DELETE http://localhost:8085/cars/356
 
-{
-  "id": 3,
-  "name" : "name",
-  "model" : "",
-  "color" : "black",
-  "year" : 2005,
-  "customerName" : "",
-  "rentEndDate" : ""
-}
+
+## Notifications ##
+
+### Get all notifications
+GET http://localhost:8085/notifications
+
+### Delete a notification
+DELETE http://localhost:8085/notifications/RTUFsYkBE9tWuF3A8SsK
