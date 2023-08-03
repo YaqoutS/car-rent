@@ -1,26 +1,43 @@
 package com.example.carrent.repository;
 
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
+import co.elastic.clients.elasticsearch._types.query_dsl.Operator;
+import co.elastic.clients.elasticsearch._types.query_dsl.Query;
 import co.elastic.clients.elasticsearch.core.*;
 import co.elastic.clients.elasticsearch.core.search.Hit;
 import com.example.carrent.model.Car;
 import com.example.carrent.model.Notification;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.http.util.EntityUtils;
+import org.springframework.data.elasticsearch.client.elc.NativeQuery;
+import org.springframework.data.elasticsearch.client.elc.QueryBuilders;
+import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
+import org.springframework.data.elasticsearch.core.SearchHit;
+import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.stereotype.Repository;
 
+import org.apache.http.HttpHost;
+import org.elasticsearch.client.Request;
+import org.elasticsearch.client.Response;
+import org.elasticsearch.client.RestClient;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+
+import java.io.IOException;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Repository
 public class ElasticSearchQuery {
 
     private final ElasticsearchClient elasticsearchClient;
+    private final ElasticsearchOperations elasticsearchOperations;
 
 //    private final String indexName = "cars";
 
-    public ElasticSearchQuery(ElasticsearchClient elasticsearchClient) {
+    public ElasticSearchQuery(ElasticsearchClient elasticsearchClient, ElasticsearchOperations elasticsearchOperations) {
         this.elasticsearchClient = elasticsearchClient;
+        this.elasticsearchOperations = elasticsearchOperations;
     }
 
     public String createOrUpdateCarDocument(Car car) throws IOException {
@@ -120,5 +137,68 @@ public class ElasticSearchQuery {
             return "Notification deleted";
         }
         return "Error: notification can't be found";
+    }
+
+    public List<Car> search(String keywords) {
+//        Float nonExistingBoost = null; // even though it exists in SpringBoot, ElasticSearch has no boost for this type of query
+//        // when you analyze what matchQuery returns, it also has nothing related to boost
+//        Query query = QueryBuilders.matchQuery("name_suggest", keywords, Operator.Or, nonExistingBoost)._toQuery();
+//        NativeQuery nativeQuery = NativeQuery.builder().withQuery(query).build();
+//        SearchHits<Car> result = this.elasticsearchOperations.search(nativeQuery, Car.class);
+//        List<Car> cars = result.stream().map(SearchHit::getContent).collect(Collectors.toList());
+//        System.out.println(cars);
+//        return cars;
+
+        List<Car> cars = new ArrayList<>();
+        List<String> suggestions = new ArrayList<>();
+        RestClient restClient = RestClient.builder(
+                new HttpHost("localhost", 9200, "http")
+        ).build();
+
+        String prefix = keywords;
+
+        // Prepare the autocomplete request JSON
+        String requestBody = "{\n" +
+                "  \"suggest\": {\n" +
+                "    \"car_name_suggestion\": {\n" +
+                "      \"prefix\": \"" + prefix + "\",\n" +
+                "      \"completion\": {\n" +
+                "        \"field\": \"name_suggest\",\n" +
+                "        \"size\": 5\n" +
+                "      }\n" +
+                "    }\n" +
+                "  }\n" +
+                "}";
+
+        try {
+            // Create the search request
+            Request request = new Request("POST", "/cars/_search");
+            request.setJsonEntity(requestBody);
+
+            // Execute the search request
+            Response response = restClient.performRequest(request);
+
+            String responseBody = EntityUtils.toString(response.getEntity());
+
+            // Parse the JSON response using Jackson ObjectMapper
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode root = objectMapper.readTree(responseBody);
+            JsonNode suggestionNode = root.path("suggest").path("car_name_suggestion").get(0).path("options");
+
+            // Convert autocomplete suggestions to a List of cars
+            Iterator<JsonNode> iterator = suggestionNode.elements();
+            while (iterator.hasNext()) {
+                JsonNode node = iterator.next();
+                Car car = new Car();
+                car.setName(node.path("text").asText());
+                suggestions.add(node.path("_source").path("name").asText());
+                cars.add(car);
+            }
+
+            System.out.println("Suggestions: " + suggestions);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return cars;
     }
 }

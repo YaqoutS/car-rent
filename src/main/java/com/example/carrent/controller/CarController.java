@@ -89,4 +89,9 @@ public class CarController {
         String result = elasticSearchQuery.deleteNotificationById(id);
         return result;
     }
+
+    @GetMapping("/cars/search/{keyword}")
+    public List<Car> search(@PathVariable String keyword) throws IOException {
+        return elasticSearchQuery.search(keyword);
+    }
 }

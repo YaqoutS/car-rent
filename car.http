@@ -9,8 +9,9 @@ POST http://localhost:8085/cars/save
 Content-Type: application/json
 
 {
-  "id" : 22,
-  "name" : "name",
+  "id" : 10,
+  "name" : "name of tenth car",
+  "name_suggest": ["name of tenth car", "name 10"],
   "model" : "",
   "color" : "black",
   "year" : 2005,
@@ -33,7 +34,7 @@ Content-Type: application/json
 }
 
 ### Delete a Car
-DELETE http://localhost:8085/cars/553
+DELETE http://localhost:8085/cars/1
 
 
 ## Notifications ##
@@ -43,3 +44,6 @@ GET http://localhost:8085/notifications
 
 ### Delete a notification
 DELETE http://localhost:8085/notifications/tfF7t4kBNmbJDprjq9Or
+
+### Search with autocomplete
+GET http://localhost:8085/cars/search/ca
