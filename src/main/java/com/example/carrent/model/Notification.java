@@ -8,6 +8,7 @@ import lombok.*;
 import org.springframework.data.elasticsearch.annotations.Document;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -15,13 +16,12 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Document(indexName = "notifications")
+@Document(indexName = "new-notifications")
 public class Notification {
     private String id;
-    @JsonAlias({"@timestamp", "_index"}) //I know it is not correct to put "_index" as an alias, but it is the only way I found to extract the timestamp from the response
     private String timestamp;
-    private String loglevel;
-    private String thread;
-    private String logger;
+    private Long carId;
+    private String rentEndDate;
     private String message;
+    private boolean notification_read_status;
 }

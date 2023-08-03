@@ -66,7 +66,7 @@ public class CarController {
         String response = elasticSearchQuery.rentCar(new Car(carDTO));
         System.out.println(response);
         CarDTO carDTO1 = carService.rent(carDTO);
-        LOG.info("Notification: Car #" + carDTO.getId() + " rented successfully");
+        LOG.info("Notification: Car #" + carDTO.getId() + " rented until " + carDTO1.getRentEndDate());
         return carDTO1;
     }
 

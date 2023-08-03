@@ -95,23 +95,26 @@ public class ElasticSearchQuery {
     }
 
     public  List<Notification> getAllNotifications() throws IOException {
-        SearchRequest searchRequest =  SearchRequest.of(s -> s.index("notifications"));
+        SearchRequest searchRequest =  SearchRequest.of(s -> s.index("new-notifications"));
         SearchResponse searchResponse =  elasticsearchClient.search(searchRequest, Notification.class);
         System.out.println("Response: " + searchResponse);
         List<Hit> hits = searchResponse.hits().hits();
         List<Notification> notifications = new ArrayList<>();
         Notification notification;
+        String msg;
         for(Hit<Notification> object : hits){
             System.out.println("Object: " + object);
             notification = (Notification) object.source();
             notification.setId(object.id());
+            msg = notification.getMessage();
+            notification.setMessage(msg.substring(msg.indexOf("Notification")));
             notifications.add(notification);
         }
         return notifications;
     }
 
     public String deleteNotificationById(String id) throws IOException {
-        DeleteRequest deleteRequest = DeleteRequest.of(d -> d.index("notifications").id(id));
+        DeleteRequest deleteRequest = DeleteRequest.of(d -> d.index("new-notifications").id(id));
         DeleteResponse deleteResponse = elasticsearchClient.delete(deleteRequest);
         if (Objects.nonNull(deleteResponse.result()) && !deleteResponse.result().name().equals("NotFound")) {
             return "Notification deleted";
